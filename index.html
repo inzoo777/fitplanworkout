@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#101827" />
+<title>FitPlan — Workout Planner</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#17243a;--text:#f4f7fb;--muted:#9aabc2;--lime:#b8f36b;--blue:#7dd3fc;--border:rgba(255,255,255,.09);--radius:20px}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 85% 0%,#1d3550 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit} button{cursor:pointer}
+.app{max-width:1120px;margin:auto;padding:22px 18px 100px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;font-size:1.2rem;letter-spacing:-.5px}.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--lime);color:#142016;font-size:23px}
+.top-right{display:flex;align-items:center;gap:10px}.date-pill{border:1px solid var(--border);border-radius:99px;padding:10px 13px;color:var(--muted);font-size:.83rem}.avatar{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#263e52;color:var(--lime);font-weight:800}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:18px;margin-bottom:20px}.hero-main{padding:30px;border-radius:26px;background:linear-gradient(125deg,#b8f36b 0%,#a5e86b 55%,#8bd6a4 100%);color:#142016;position:relative;overflow:hidden;min-height:235px}.eyebrow{font-size:.75rem;font-weight:850;text-transform:uppercase;letter-spacing:1.5px;opacity:.72}.hero h1{font-size:clamp(2rem,4vw,3rem);letter-spacing:-1.7px;line-height:1.04;margin:13px 0 10px;max-width:450px}.hero p{margin:0;max-width:390px;line-height:1.55;color:#243d25;font-size:.95rem}.hero-mark{position:absolute;right:25px;bottom:18px;font-size:90px;opacity:.16;transform:rotate(-14deg)}.hero-side{background:var(--panel);border:1px solid var(--border);border-radius:26px;padding:23px;display:flex;flex-direction:column;justify-content:space-between}.side-top{display:flex;justify-content:space-between;align-items:center}.side-title{color:var(--muted);font-size:.86rem}.big-number{font-size:2.4rem;font-weight:850;letter-spacing:-1px;margin-top:10px}.big-number span{font-size:.9rem;color:var(--muted);font-weight:600;letter-spacing:0}.progress{height:8px;border-radius:99px;background:#29364b;overflow:hidden;margin:13px 0 9px}.progress>span{display:block;height:100%;width:0;background:var(--lime);border-radius:99px;transition:width .25s}.small-muted{font-size:.78rem;color:var(--muted);line-height:1.5}
+.tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 18px;scrollbar-width:none}.tab{white-space:nowrap;border:1px solid var(--border);background:transparent;color:var(--muted);padding:11px 16px;border-radius:13px;font-weight:750}.tab.active{background:var(--lime);border-color:var(--lime);color:#152016}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:14px 0 14px}.section-head h2{font-size:1.3rem;margin:0;letter-spacing:-.5px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:.86rem}.link-btn{border:0;background:none;color:var(--lime);font-weight:750;padding:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:24px}.stat{padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:18px}.stat-icon{font-size:1.2rem}.stat-label{color:var(--muted);font-size:.78rem;margin-top:12px}.stat-value{font-size:1.35rem;font-weight:850;margin-top:4px}
+.content-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:20px;min-width:0}.panel h3{font-size:1rem;margin:0}.panel-sub{color:var(--muted);font-size:.82rem;margin:6px 0 16px}
+.workout-list,.meal-list{display:grid;gap:10px}.workout-item,.meal-item{display:flex;align-items:center;gap:12px;padding:13px;border-radius:15px;background:var(--panel2);border:1px solid transparent}.workout-item.done{border-color:rgba(184,243,107,.4)}.workout-item.done .item-name{text-decoration:line-through;color:var(--muted)}
+.check{width:24px;height:24px;flex:0 0 24px;border-radius:8px;border:1.5px solid #53657a;background:transparent;color:#142016;display:grid;place-items:center;font-size:.85rem}.check.checked{background:var(--lime);border-color:var(--lime)}.item-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#26384c;font-size:1.3rem;flex:0 0 42px}.item-info{min-width:0;flex:1}.item-name{font-size:.9rem;font-weight:800}.item-meta{font-size:.75rem;color:var(--muted);margin-top:4px}.tag{font-size:.7rem;color:var(--blue);background:#20394b;border-radius:8px;padding:6px 8px;white-space:nowrap}
+.meal-item{align-items:flex-start}.meal-time{font-size:.7rem;color:var(--lime);font-weight:850;text-transform:uppercase;letter-spacing:.7px;min-width:65px;padding-top:3px}.meal-name{font-size:.88rem;font-weight:800}.meal-desc{font-size:.76rem;color:var(--muted);margin-top:4px;line-height:1.45}
+.tip{display:flex;gap:12px;align-items:flex-start;background:#172a2b;border:1px solid rgba(184,243,107,.18);border-radius:17px;padding:15px;margin-top:14px}.tip-icon{font-size:1.25rem}.tip strong{font-size:.85rem}.tip p{margin:5px 0 0;color:#b8c8c4;font-size:.78rem;line-height:1.5}
+.view{display:none}.view.active{display:block}.day-select{background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:12px;max-width:100%}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:13px}.exercise-card{padding:17px;border-radius:18px;background:var(--panel2);border:1px solid var(--border)}.exercise-card .emoji{font-size:1.7rem}.exercise-card h4{margin:12px 0 5px}.exercise-card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.5}.exercise-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:.78rem;color:var(--lime);font-weight:750}
+.meal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.meal-card{background:var(--panel2);border-radius:17px;padding:17px}.meal-card .food-icon{font-size:1.6rem}.meal-card h4{margin:10px 0 6px}.meal-card p{color:var(--muted);font-size:.82rem;line-height:1.5;margin:0}.meal-card .meal-time{display:block;margin-top:13px}
+.habit-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}.habit-row:last-child{border-bottom:0}.habit-row .item-info{flex:1}.habit-row .item-meta{line-height:1.4}
+.primary{border:0;border-radius:13px;background:var(--lime);color:#142016;padding:12px 16px;font-weight:850}.secondary{border:1px solid var(--border);border-radius:13px;background:var(--panel2);color:var(--text);padding:11px 14px;font-weight:750}.button-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.footer-note{text-align:center;color:var(--muted);font-size:.74rem;line-height:1.6;margin-top:28px}
+.mobile-nav{display:none}
+@media(max-width:760px){.app{padding:16px 13px 95px}.topbar{margin-bottom:18px}.date-pill{display:none}.hero{grid-template-columns:1fr}.hero-main{min-height:210px;padding:25px}.hero-side{min-height:155px}.content-grid{grid-template-columns:1fr}.stats{gap:9px}.stat{padding:13px}.stat-value{font-size:1.15rem}.stat-label{font-size:.7rem}.panel{padding:16px}.hero-mark{right:15px;font-size:75px}.mobile-nav{position:fixed;display:flex;z-index:10;bottom:0;left:0;right:0;background:rgba(11,18,32,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:9px 6px calc(9px + env(safe-area-inset-bottom));justify-content:space-around}.mobile-nav button{border:0;background:none;color:var(--muted);font-size:.68rem;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 9px}.mobile-nav button span{font-size:1.2rem}.mobile-nav button.active{color:var(--lime)}.tabs{display:none}.two-col,.meal-grid{grid-template-columns:1fr}.section-head{align-items:center}.tag{display:none}}
+@media(min-width:761px){.mobile-nav{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">✦</div><span>FitPlan</span></div>
+    <div class="top-right"><div class="date-pill" id="todayDate">Your wellness dashboard</div><div class="avatar">FP</div></div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Your plan, your pace</div>
+      <h1>Small steps.<br>Stronger habits.</h1>
+      <p>Simple at-home workouts and balanced meal ideas to help you build a routine that works for you.</p>
+      <div class="hero-mark">✳</div>
+    </div>
+    <div class="hero-side">
+      <div>
+        <div class="side-top"><span class="side-title">Today's progress</span><span>⚡</span></div>
+        <div class="big-number"><span id="completedCount">0</span><span> / 5 tasks</span></div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div class="small-muted" id="progressText">Start with one small win today.</div>
+      </div>
+      <div class="small-muted">Consistency matters more than perfection.</div>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="Main navigation">
+    <button class="tab active" data-view="dashboard">Overview</button>
+    <button class="tab" data-view="workouts">Home workouts</button>
+    <button class="tab" data-view="meals">Meal planner</button>
+    <button class="tab" data-view="habits">Daily habits</button>
+  </nav>
+
+  <main>
+    <section class="view active" id="dashboard">
+      <div class="stats">
+        <div class="stat"><div class="stat-icon">🏠</div><div class="stat-label">Workout style</div><div class="stat-value">At home</div></div>
+        <div class="stat"><div class="stat-icon">🥗</div><div class="stat-label">Food approach</div><div class="stat-value">Balanced</div></div>
+        <div class="stat"><div class="stat-icon">🌱</div><div class="stat-label">Today's focus</div><div class="stat-value">Build a habit</div></div>
+      </div>
+      <div class="content-grid">
+        <section class="panel">
+          <div class="section-head"><div><h2>Today's workout</h2><p>Beginner-friendly · No equipment</p></div><button class="link-btn" data-goto="workouts">See plan ↗</button></div>
+          <div class="workout-list" id="todayWorkoutList"></div>
+        </section>
+        <section class="panel">
+          <div class="section-head"><div><h2>Today's meal ideas</h2><p>Flexible options for your day</p></div><button class="link-btn" data-goto="meals">View meals ↗</button></div>
+          <div class="meal-list" id="todayMealList"></div>
+          <div class="tip"><div class="tip-icon">💧</div><div><strong>Remember to hydrate</strong><p>Keep water nearby and drink regularly, especially when you're active.</p></div></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="workouts">
+      <div class="section-head"><div><h2>Home workout plan</h2><p>Choose a day and move at a comfortable pace.</p></div>
+        <select class="day-select" id="daySelect" aria-label="Choose workout day"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option><option value="Sunday">Sunday</option></select>
+      </div>
+      <div class="panel"><div id="workoutPlan" class="two-col"></div><div class="tip"><div class="tip-icon">🧘</div><div><strong>Make it your own</strong><p>Warm up gently, take breaks when needed, and stop if something hurts. Rest days are part of a healthy routine.</p></div></div></div>
+    </section>
+
+    <section class="view" id="meals">
+      <div class="section-head"><div><h2>Balanced meal planner</h2><p>Mix and match foods you enjoy. These are ideas, not strict rules.</p></div></div>
+      <div class="meal-grid" id="mealPlan"></div>
+      <div class="tip"><div class="tip-icon">🥑</div><div><strong>A flexible approach works best</strong><p>Try to include a variety of foods, such as fruit or vegetables, grains, and protein. Adjust portions to your hunger, activity, culture, and needs. No foods need to be labelled “good” or “bad.”</p></div></div>
+    </section>
+
+    <section class="view" id="habits">
+      <div class="section-head"><div><h2>Daily habits</h2><p>Check off small actions as you go.</p></div><button class="secondary" id="resetBtn">Reset today</button></div>
+      <div class="panel"><div id="habitList"></div></div>
+      <div class="button-row"><button class="primary" data-goto="dashboard">Back to overview</button></div>
+    </section>
+  </main>
+  <p class="footer-note">FitPlan is a general wellness planner, not medical advice. Adapt activities and meals to your needs, and ask a qualified professional for personal guidance when needed.</p>
+</div>
+
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <button class="active" data-view="dashboard"><span>⌂</span>Overview</button>
+  <button data-view="workouts"><span>🏃</span>Workout</button>
+  <button data-view="meals"><span>🥗</span>Meals</button>
+  <button data-view="habits"><span>✓</span>Habits</button>
+</nav>
+<script>
+const workouts = [
+ {name:"Gentle warm-up",icon:"🤸",meta:"5 minutes · Mobility",detail:"Easy marching in place, shoulder rolls and gentle stretches.",duration:"5 min"},
+ {name:"Bodyweight squats",icon:"🦵",meta:"2 sets · Comfortable reps",detail:"Sit hips back as if reaching for a chair. Use a chair for support if helpful.",duration:"5 min"},
+ {name:"Wall push-ups",icon:"💪",meta:"2 sets · Comfortable reps",detail:"Place hands on a wall and bend your elbows slowly, keeping the movement controlled.",duration:"5 min"},
+ {name:"March in place",icon:"👟",meta:"5 minutes · Easy pace",detail:"March at a pace where you can still talk comfortably.",duration:"5 min"},
+ {name:"Cool down & stretch",icon:"🧘",meta:"5 minutes · Relax",detail:"Breathe steadily and stretch gently without forcing any movement.",duration:"5 min"}
+];
+const mealIdeas = [
+ {time:"Breakfast",icon:"🥣",name:"Oats & fruit",desc:"Oats with milk or yogurt, fruit, and nuts or seeds if you like."},
+ {time:"Lunch",icon:"🍲",name:"Balanced bowl",desc:"Rice, couscous, or potatoes with beans, eggs, chicken, or another protein and vegetables."},
+ {time:"Snack",icon:"🍎",name:"A simple snack",desc:"Fruit with yogurt, cheese and crackers, or another snack you enjoy."},
+ {time:"Dinner",icon:"🥙",name:"Easy homemade plate",desc:"Vegetable soup or salad, bread or grains, and a protein such as lentils, fish, eggs, or beans."}
+];
+const habits = [
+ {name:"Move your body",icon:"👟",meta:"Choose a workout, walk, dance, or gentle stretch."},
+ {name:"Drink water regularly",icon:"💧",meta:"Keep water nearby and sip throughout the day."},
+ {name:"Eat regular, varied meals",icon:"🥗",meta:"Include foods you enjoy and pay attention to hunger and fullness."},
+ {name:"Take a screen break",icon:"🌿",meta:"Stand up, rest your eyes, or get some fresh air."},
+ {name:"Make time to rest",icon:"🌙",meta:"Allow time to relax and get enough sleep."}
+];
+const weekly = {
+ Monday:["Full-body basics","Gentle strength and mobility"],
+ Tuesday:["Light movement","Walking, dancing, or marching in place"],
+ Wednesday:["Mobility & balance","Easy stretches and balance practice"],
+ Thursday:["Full-body basics","Repeat comfortable bodyweight movements"],
+ Friday:["Fun movement","Choose an activity you enjoy"],
+ Saturday:["Outdoor or indoor walk","Easy movement at your own pace"],
+ Sunday:["Rest & reset","Rest, stretch gently, and plan your week"]
+};
+let checked = new Set();
+function renderDashboard(){
+ document.getElementById("todayWorkoutList").innerHTML=workouts.map((w,i)=>`<div class="workout-item ${checked.has(i)?"done":""}"><button class="check ${checked.has(i)?"checked":""}" data-task="${i}" aria-label="Mark ${w.name} complete">${checked.has(i)?"✓":""}</button><div class="item-icon">${w.icon}</div><div class="item-info"><div class="item-name">${w.name}</div><div class="item-meta">${w.meta}</div></div><span class="tag">${w.duration}</span></div>`).join("");
+ document.getElementById("todayMealList").innerHTML=mealIdeas.slice(0,3).map(m=>`<div class="meal-item"><div class="meal-time">${m.time}</div><div class="item-info"><div class="meal-name">${m.name}</div><div class="meal-desc">${m.desc}</div></div></div>`).join("");
+ document.getElementById("completedCount").textContent=checked.size;
+ document.getElementById("progressBar").style.width=(checked.size/5*100)+"%";
+ document.getElementById("progressText").textContent=checked.size===5?"All tasks checked off — great job showing up!":checked.size===0?"Start with one small win today.":`${5-checked.size} ${5-checked.size===1?"task":"tasks"} left in today's plan.`;
+ document.querySelectorAll("[data-task]").forEach(b=>b.addEventListener("click",()=>{const n=Number(b.dataset.task);checked.has(n)?checked.delete(n):checked.add(n);renderDashboard();renderHabits();}));
+}
+function renderWorkoutPlan(){
+ const day=document.getElementById("daySelect").value;
+ const isRest=day==="Sunday";
+ const title=weekly[day][0],desc=weekly[day][1];
+ const plan=isRest?[{icon:"🌿",name:"Rest day",meta:"Take time to recharge",detail:"Relax, do an optional gentle stretch, and enjoy a restful day.",duration:"Optional"}]:workouts;
+ document.getElementById("workoutPlan").innerHTML=plan.map((w,i)=>`<article class="exercise-card"><div class="emoji">${w.icon}</div><h4>${w.name}</h4><p>${w.detail||w.meta}</p><div class="exercise-foot"><span>${w.duration||"Flexible"}</span><span>${isRest?"Recovery":"Move gently"}</span></div></article>`).join("");
+ if(!isRest){document.querySelector("#workouts .section-head p").textContent=`${day} · ${title} · ${desc}`;}else{document.querySelector("#workouts .section-head p").textContent=`${day} · ${title} · ${desc}`;}
+}
+function renderMeals(){document.getElementById("mealPlan").innerHTML=mealIdeas.map(m=>`<article class="meal-card"><div class="food-icon">${m.icon}</div><span class="meal-time">${m.time}</span><h4>${m.name}</h4><p>${m.desc}</p></article>`).join("");}
+function renderHabits(){document.getElementById("habitList").innerHTML=habits.map((h,i)=>`<div class="habit-row"><div class="item-icon">${h.icon}</div><div class="item-info"><div class="item-name">${h.name}</div><div class="item-meta">${h.meta}</div></div><button class="check ${checked.has(i)?"checked":""}" data-habit="${i}" aria-label="Mark ${h.name} complete">${checked.has(i)?"✓":""}</button></div>`).join("");document.querySelectorAll("[data-habit]").forEach(b=>b.addEventListener("click",()=>{const n=Number(b.dataset.habit);checked.has(n)?checked.delete(n):checked.add(n);renderDashboard();renderHabits();}));}
+function showView(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===id));window.scrollTo({top:0,behavior:"smooth"});}
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.goto)));
+document.getElementById("daySelect").addEventListener("change",renderWorkoutPlan);
+document.getElementById("resetBtn").addEventListener("click",()=>{checked.clear();renderDashboard();renderHabits();});
+document.getElementById("todayDate").textContent=new Date().toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+const dayNames=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+document.getElementById("daySelect").value=dayNames[new Date().getDay()];
+renderDashboard();renderWorkoutPlan();renderMeals();renderHabits();
+</script>
+</body>
+</html>
